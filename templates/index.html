@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>AI Resume Analyzer</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>🚀 AI Resume Analyzer</h1>
+
+    <!-- FORM -->
+
+    <div class="form-box">
+
+        <form method="POST"
+              enctype="multipart/form-data"
+              id="resumeForm">
+
+            <label>Upload Resume</label>
+
+            <input type="file"
+                   name="resume"
+                   required>
+
+            <label>Job Description</label>
+
+            <textarea
+                name="job_desc"
+                placeholder="Paste Job Description Here..."
+                required></textarea>
+
+            <button type="submit"
+                    id="analyzeBtn">
+
+                Analyze Resume
+
+            </button>
+
+        </form>
+
+    </div>
+
+    <!-- RESULT -->
+
+    {% if result %}
+
+    <div class="result-box">
+
+        <h2>📊 ATS Analysis Result</h2>
+
+        <!-- SCORE -->
+
+        <div class="score-box">
+
+            <div class="progress">
+
+                <div class="progress-bar
+
+                {% if result.score >= 80 %}
+                excellent
+
+                {% elif result.score >= 60 %}
+                good
+
+                {% elif result.score >= 40 %}
+                average
+
+                {% else %}
+                poor
+                {% endif %}
+
+                "
+
+                style="width: {{ result.score }}%;">
+
+                    {{ result.score }}%
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <!-- FEEDBACK -->
+
+        <div class="feedback-box">
+
+            <h3>💡 Resume Feedback</h3>
+
+            <p>{{ result.feedback }}</p>
+
+        </div>
+
+        <!-- MATCHED -->
+
+        <div class="section">
+
+            <h3>✅ Matched Skills</h3>
+
+            <div class="chips">
+
+                {% for skill in result.matched %}
+
+                <span class="chip">
+                    {{ skill }}
+                </span>
+
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+        <!-- ALL SKILLS -->
+
+        <div class="section">
+
+            <h3>🧠 Resume Skills</h3>
+
+            <div class="chips">
+
+                {% for skill in result.skills %}
+
+                <span class="chip skill-chip">
+                    {{ skill }}
+                </span>
+
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+        <!-- MISSING -->
+
+        <div class="section">
+
+            <h3>❌ Missing Skills</h3>
+
+            <div class="chips">
+
+                {% for skill in result.missing %}
+
+                <span class="chip missing">
+                    {{ skill }}
+                </span>
+
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+    </div>
+
+    {% endif %}
+
+</div>
+
+<!-- Loading Animation -->
+
+<script>
+
+const form = document.getElementById("resumeForm");
+
+const button = document.getElementById("analyzeBtn");
+
+form.addEventListener("submit", () => {
+
+    button.innerHTML = "Analyzing Resume...";
+
+    button.disabled = true;
+
+});
+
+</script>
+
+</body>
+
+</html>
